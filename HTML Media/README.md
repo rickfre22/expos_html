@@ -1,55 +1,70 @@
-# expos_html
-## tema ,HTML media
+# Guía de Medios en HTML: Video, Audio y Complementos
 
-# HTML Media Elements
+Este documento proporciona una referencia técnica sobre cómo integrar y gestionar contenido multimedia utilizando los estándares de HTML5.
 
-Los elementos multimedia de HTML permiten la integración nativa de contenido de audio y vídeo en documentos web, eliminando la necesidad histórica de complementos externos como Flash o ActiveX. Estos elementos proporcionan una forma estandarizada de presentar flujos de datos multimedia a los usuarios.
+---
 
-## Introducción a las etiquetas multimedia
+## 1. Implementación de Video (<video>)
 
-El estándar HTML5 introdujo dos elementos principales para manejar medios:
+El elemento <video> es el estándar para mostrar películas o clips de video en una página web.
 
-*   **`<video>`**: Utilizado para reproducir clips de vídeo, películas o archivos de audio con subtítulos vinculados. Este elemento incluye un área de reproducción para contenido visual.
-*   **`<audio>`**: Diseñado específicamente para reproducir archivos de sonido o flujos de audio. A diferencia del elemento de vídeo, no posee un área de visualización nativa para imágenes o subtítulos.
+### Ejemplo de Código Básico
 
-Ambos elementos actúan como contenedores de contenido incrustado y permiten la inclusión de texto alternativo dentro de sus etiquetas de apertura y cierre, el cual solo se mostrará si el navegador no admite el elemento multimedia correspondiente.
+html
+<video width="320" height="240" controls>
+  <source src="pelicula.mp4" type="video/mp4">
+  <source src="pelicula.ogg" type="video/ogg">
+  Tu navegador no soporta la etiqueta de video.
+</video>
+**Atributos recomendados:** Es aconsejable incluir siempre width (ancho) y height (alto) para evitar que la página parpadee mientras el video se carga.
+**Controles:** El atributo controls añade botones esenciales como reproducción, pausa y volumen.
 
-## Atributos principales de configuración
+### Autoplay y Restricciones
 
-Los elementos multimedia comparten un conjunto de atributos comunes que definen su comportamiento y apariencia:
+El atributo autoplay inicia el video automáticamente.
+En navegadores basados en Chromium, el inicio automático suele estar bloqueado a menos que se añada el atributo muted (silenciado).
 
-| Atributo | Descripción |
+---
+
+## 2. Formatos de Video y Tipos de Medios
+
+HTML soporta principalmente tres formatos de video, cada uno con su correspondiente tipo de medio (MIME):
+
+| Formato | Tipo de Medio (MIME) | Soporte en Navegadores |
+| :--- | :--- | :--- |
+| **MP4** | video/mp4 | Compatible con Edge, Chrome, Firefox, Safari y Opera. |
+| **WebM** | video/webm | Compatible con Edge, Chrome, Firefox, Safari y Opera. |
+| **Ogg** | video/ogg | Compatible con Edge, Chrome, Firefox y Opera (No Safari). |
+
+ **Nota:** El navegador cargará automáticamente el primer formato que reconozca dentro de la lista de etiquetas <source>.
+
+---
+
+## 3. Audio, YouTube y Complementos
+
+Además del video, el estándar HTML contempla otras formas de integración de medios:
+
+**Audio:** Se utiliza el elemento <audio> para integrar sonidos o música.
+**YouTube:** Permite la inserción de videos directamente desde la plataforma de YouTube.
+**Complementos (Plug-ins):** Se gestionan habitualmente mediante la etiqueta <object> para definir recursos externos o funcionalidades adicionales.
+
+---
+
+## 4. Referencia de Etiquetas Multimedia
+
+| Etiqueta | Descripción |
 | :--- | :--- |
-| **`src`** | Indica la dirección URL del recurso multimedia que se va a mostrar o reproducir. |
-| **`controls`** | Atributo booleano que indica al navegador que debe mostrar su propia interfaz de controles (reproducción, pausa, volumen, etc.). |
-| **`autoplay`** | Indica que el recurso debe comenzar a reproducirse automáticamente tan pronto como sea posible. Los navegadores modernos suelen requerir que el medio esté silenciado para permitir esto. |
-| **`loop`** | Atributo booleano que, si está presente, hace que el recurso vuelva a empezar desde el principio al llegar al final. |
-| **`muted`** | Define que el estado inicial del audio debe estar silenciado. |
-| **`poster`** | (Solo en `<video>`) Especifica la URL de una imagen que se muestra mientras el vídeo se descarga o hasta que el usuario pulsa el botón de reproducción. |
+| <video> | Define un video o película. |
+| <audio> | Define contenido de sonido. |
+| <source> | Define múltiples recursos para que el navegador elija el más compatible. |
+| <track> | Define pistas de texto (como subtítulos) para el reproductor. |
 
-## El objeto JavaScript `HTMLMediaElement`
+---
 
-Desde la perspectiva del DOM (Document Object Model), tanto los elementos de vídeo como de audio heredan de la interfaz **`HTMLMediaElement`**. Esta interfaz proporciona métodos, propiedades y eventos comunes para manipular el contenido multimedia mediante scripts.
+## 5. Control mediante JavaScript (DOM)
 
-### Eventos clave de reproducción
-El ciclo de vida de un elemento multimedia está acompañado de diversos eventos que notifican cambios en su estado:
+El DOM (Modelo de Objetos del Documento) permite interactuar con los elementos de video mediante programación:
 
-*   **`play`**: Se dispara cuando el elemento ya no está en pausa, ya sea por una llamada al método `.play()` o por el atributo `autoplay`.
-*   **`pause`**: Se activa cuando la reproducción se detiene, estableciendo la propiedad `paused` a `true`.
-*   **`ended`**: Ocurre cuando la reproducción ha llegado al final del recurso multimedia.
-
-## Buenas prácticas: Usabilidad y Accesibilidad
-
-Para garantizar una experiencia de usuario óptima y accesible, se recomiendan las siguientes estrategias:
-
-### Gestión de formatos y compatibilidad
-Dado que no todos los navegadores admiten los mismos códecs, es una buena práctica utilizar el elemento **`<source>`** dentro de `<video>` o `<audio>`. Esto permite especificar múltiples archivos alternativos; el navegador elegirá el primer formato que reconozca (por ejemplo, MP4, WebM u Ogg para vídeo).
-
-### Accesibilidad con `<track>`
-El elemento **`<track>`** permite especificar pistas de texto externas sincronizadas en el tiempo, fundamentales para la accesibilidad. Se utiliza para incluir:
-*   **Subtítulos (`subtitles`)**: Traducciones del diálogo para usuarios que no entienden el idioma.
-*   **Subtítulos para sordos (`captions`)**: Transcripción de diálogos y efectos de sonido relevantes para personas con discapacidad auditiva.
-*   **Descripciones (`descriptions`)**: Descripciones textuales del contenido visual para síntesis de voz, orientadas a usuarios ciegos.
-
-### Rendimiento y visualización
-Es recomendable definir siempre los atributos **`width`** y **`height`** en los elementos de vídeo. Si no se especifican, el navegador no conocerá las dimensiones hasta que comience la carga, lo que puede provocar parpadeos o cambios bruscos en el diseño de la página mientras el vídeo se descarga. En dispositivos móviles o con recursos limitados, se aconseja liberar los recursos estableciendo el atributo `src` como una cadena vacía una vez finalizado el uso del medio.
+Es posible utilizar métodos como play() y pause().
+Permite consultar y modificar propiedades para ajustar el volumen y la duración del contenido.
+Notifica cambios de estado mediante eventos (como cuando el video comienza a reproducirse o se detiene).
